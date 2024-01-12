@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "portofolio_uas_kk4_maleachi-ranu-edison",
+    "slug": "snack-4edecb61-5763-4912-a5d6-2be068af8e14",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b0aee765-cad0-4a7e-a06f-e086a359ecca"
+      }
+    }
+  }
+}

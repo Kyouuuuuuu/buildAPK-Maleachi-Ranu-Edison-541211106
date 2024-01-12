@@ -1,0 +1,234 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+
+const TaskList = () => {
+  const [tasks, setTasks] = useState([]);
+  const [taskName, setTaskJenis] = useState('');
+  const [taskPembimbing, setTaskPembimbing] = useState('');
+  const [taskWaktu, setTaskWaktu] = useState('');
+  const [taskRuangan, setTaskRuangan] = useState('');
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const addTask = () => {
+    if (taskName && taskPembimbing && taskWaktu && taskRuangan) {
+      const newTask = {
+        id: Date.now().toString(),
+        name: taskName,
+        pembimbing: taskPembimbing,
+        waktu: taskWaktu,
+        ruangan: taskRuangan,
+      };
+      setTasks([...tasks, newTask]);
+      setTaskJenis('');
+      setTaskPembimbing('');
+      setTaskWaktu('');
+      setTaskRuangan('');
+    }
+  };
+
+  const updateTask = () => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === selectedTaskId
+        ? {
+            ...task,
+            name: taskName,
+            pembimbing: taskPembimbing,
+            waktu: taskWaktu,
+            ruangan: taskRuangan,
+          }
+        : task
+    );
+    setTasks(updatedTasks);
+    setSelectedTaskId(null);
+    setTaskJenis('');
+    setTaskPembimbing('');
+    setTaskWaktu('');
+    setTaskRuangan('');
+  };
+
+  const deleteTask = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+  };
+
+ // ...
+
+const renderTaskItem = ({ item }) => (
+  <View style={styles.taskContainer}>
+    <TouchableOpacity
+      style={styles.taskItem}
+      onPress={() => {
+        setSelectedTaskId(item.id);
+        setTaskJenis(item.name);
+        setTaskPembimbing(item.pembimbing);
+        setTaskWaktu(item.waktu);
+        setTaskRuangan(item.ruangan);
+      }}
+    >
+      <Text style={styles.taskName}>{item.name}</Text>
+      <Text style={styles.taskDate}>{`Nama pembimbing: ${item.pembimbing}`}</Text>
+      <Text style={styles.taskDate}>{`Waktu: ${item.waktu}`}</Text>
+      <Text style={styles.taskDate}>{`Ruangan: ${item.ruangan}`}</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={styles.deleteButton}
+      onPress={() => deleteTask(item.id)}
+    >
+      <Text style={styles.deleteButtonText}>Delete</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+// ...
+
+
+  // Filter tasks based on search query
+  const filteredTasks = tasks.filter((task) =>
+    task.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Estrakurikuler list</Text>
+
+      {/* Add search input */}
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search by task name"
+        value={searchQuery}
+        onChangeText={(text) => setSearchQuery(text)}
+      />
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Task Name"
+          value={taskName}
+          onChangeText={(text) => setTaskJenis(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="masukan nama pembimbing"
+          value={taskPembimbing}
+          onChangeText={(text) => setTaskPembimbing(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Waktu"
+          value={taskWaktu}
+          onChangeText={(text) => setTaskWaktu(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Ruangan"
+          value={taskRuangan}
+          onChangeText={(text) => setTaskRuangan(text)}
+        />
+
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={selectedTaskId ? updateTask : addTask}
+        >
+          <Text style={styles.addButtonText}>
+            {selectedTaskId ? 'Update Task' : 'Add Task'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList data={filteredTasks} keyExtractor={(item) => item.id} renderItem={renderTaskItem} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#ecf0f1',
+    marginTop: 40
+  },
+  header: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#222831',
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#bdc3c7',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#ecf0f1',
+    color: '#34495e',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: '#bdc3c7',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#ecf0f1',
+    color: '#34495e',
+  },
+  taskContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  taskItem: {
+    flex: 1,
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    elevation: 5,
+  },
+  taskName: {
+    fontSize: 18,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  taskDate: {
+    color: 'black',
+  },
+  addButton: {
+    width: 150,
+    height: 45,
+    backgroundColor: '#222831',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  addButtonText: {
+    fontSize: 17,
+    color: 'white',
+    fontWeight: '700',
+  },
+  deleteButton: {
+    width: 70,
+    height: 35,
+    backgroundColor: '#f44336',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 5,
+    top: 30,
+    right: 90
+  },
+  deleteButtonText: {
+    fontSize: 14,
+    color: 'white',
+  },
+});
+
+export default TaskList;
