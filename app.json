@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kyouu.snack4edecb6157634912a5d62be068af8e14"
     },
     "web": {
       "favicon": "./assets/favicon.png"
